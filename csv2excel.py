@@ -3,7 +3,7 @@ import pandas as pd
 import sys
 from openpyxl import load_workbook
 from PyQt5.QtWidgets import QApplication
-from GUI import CsvToExcelApp
+
 
 folder_to_sheet_map = {
     "A1501": "1(56)", "A1520": "1(78)", "A1521": "2(34)", "A1507": "2(56)", "A1509": "2(78)",
@@ -74,10 +74,3 @@ def import_csv_to_excel(root_folder, excel_file, result_callback):
 
     result_callback(f"所有資料夾中的 CSV 檔案已成功匯入 {excel_file}，每個 CSV 對應一個工作表。")
 
-# 啟動應用程式
-if __name__ == "__main__":
-    # 必須在創建任何 PyQt5 元件之前創建 QApplication
-    app = QApplication(sys.argv)
-    window = CsvToExcelApp(import_csv_to_excel)
-    window.show()
-    sys.exit(app.exec_())

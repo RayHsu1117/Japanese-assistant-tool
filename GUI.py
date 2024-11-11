@@ -1,6 +1,9 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QTextEdit, QLabel
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QApplication
+from csv2excel import import_csv_to_excel  # 匯入 csv2excel.py 中的函數
+import sys
 
 class CsvToExcelApp(QWidget):
     def __init__(self, import_function):
@@ -88,3 +91,14 @@ class CsvToExcelApp(QWidget):
     def display_result(self, message):
         # 直接將訊息顯示於 QTextEdit，並且確保訊息中有換行符（\n）
         self.result_text.append(message)
+
+# 啟動應用程式
+if __name__ == "__main__":
+    # 必須在創建任何 PyQt5 元件之前創建 QApplication
+    app = QApplication(sys.argv)
+    
+    # 使用從 csv2excel.py 匯入的函數
+    window = CsvToExcelApp(import_function=import_csv_to_excel)
+    window.show()
+
+    sys.exit(app.exec_())
