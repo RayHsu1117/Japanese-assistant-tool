@@ -1,8 +1,5 @@
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QTextEdit, QLabel
-)
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QTextEdit, QLabel
 from PyQt5.QtCore import Qt
-import sys
 
 class CsvToExcelApp(QWidget):
     def __init__(self, import_function):
@@ -69,8 +66,3 @@ class CsvToExcelApp(QWidget):
 
     def display_result(self, message):
         self.result_text.append(message)
-
-    def run(self):
-        app = QApplication(sys.argv)
-        self.show()
-        sys.exit(app.exec_())
