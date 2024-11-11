@@ -5,7 +5,7 @@ from openpyxl import load_workbook
 from PyQt5.QtWidgets import QApplication
 
 
-folder_to_sheet_map = {
+class_id_to_time_map = {
     "A1501": "1(56)", "A1520": "1(78)", "A1521": "2(34)", "A1507": "2(56)", "A1509": "2(78)",
     "A1536": "3(34)", "A1525": "3(56)", "A1510": "3(78)", "A1512": "4(34)", "A1513": "4(56)",
     "A1535": "4(78)", "A1515": "5(34)", "A1517": "5(56)"
@@ -44,19 +44,19 @@ def import_csv_to_excel(root_folder, excel_file, result_callback):
                             existing_df = pd.read_excel(excel_file, sheet_name=sheet_name)
                             new_students = df[~df['學號(Student ID)'].isin(existing_df['學號(Student ID)'])]
                             if not new_students.empty:
-                                new_students.loc[:, '開課系序號'] = new_students['開課系序號'].map(folder_to_sheet_map).fillna(new_students['開課系序號'])
+                                new_students.loc[:, '開課系序號'] = new_students['開課系序號'].map(class_id_to_time_map).fillna(new_students['開課系序號'])
                                 result_callback(f"發現新加入的學生：\n{new_students}")
                             
                             removed_students = df[df['Status'] == '退選']
                             if not removed_students.empty:
-                                removed_students.loc[:, '開課系序號'] = removed_students['開課系序號'].map(folder_to_sheet_map).fillna(removed_students['開課系序號'])
+                                removed_students.loc[:, '開課系序號'] = removed_students['開課系序號'].map(class_id_to_time_map).fillna(removed_students['開課系序號'])
                                 result_callback(f"發現已退課的學生：\n{removed_students}")
 
                             # 找出棄選的學生：現有名單中有，但新名單中不存在的學生
                             dropped_students = existing_df[~existing_df['學號(Student ID)'].isin(df['學號(Student ID)'])]
                             existing_df['成績(Score)'] = existing_df['成績(Score)'].astype(str)
                             if not dropped_students.empty:
-                                dropped_students.loc[:, '開課系序號'] = dropped_students['開課系序號'].map(folder_to_sheet_map).fillna(dropped_students['開課系序號'])
+                                dropped_students.loc[:, '開課系序號'] = dropped_students['開課系序號'].map(class_id_to_time_map).fillna(dropped_students['開課系序號'])
                                 result_callback(f"發現棄選的學生（已從名單消失）：\n{dropped_students}")
                             existing_df.loc[existing_df['學號(Student ID)'].isin(dropped_students['學號(Student ID)']), '成績(Score)'] = '棄選'
                             updated_df = pd.concat([existing_df, new_students]).drop_duplicates(subset=['學號(Student ID)'], keep='last')
