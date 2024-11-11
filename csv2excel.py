@@ -44,6 +44,7 @@ def import_csv_to_excel(root_folder, excel_file, result_callback):
                             existing_df = pd.read_excel(excel_file, sheet_name=sheet_name)
                             new_students = df[~df['學號(Student ID)'].isin(existing_df['學號(Student ID)'])]
                             if not new_students.empty:
+                                new_students.loc[:, '開課系序號'] = new_students['開課系序號'].map(folder_to_sheet_map).fillna(new_students['開課系序號'])
                                 result_callback(f"發現新加入的學生：\n{new_students}")
                             
                             removed_students = df[df['Status'] == '退選']
@@ -55,6 +56,7 @@ def import_csv_to_excel(root_folder, excel_file, result_callback):
                             dropped_students = existing_df[~existing_df['學號(Student ID)'].isin(df['學號(Student ID)'])]
                             existing_df['成績(Score)'] = existing_df['成績(Score)'].astype(str)
                             if not dropped_students.empty:
+                                dropped_students.loc[:, '開課系序號'] = dropped_students['開課系序號'].map(folder_to_sheet_map).fillna(dropped_students['開課系序號'])
                                 result_callback(f"發現棄選的學生（已從名單消失）：\n{dropped_students}")
                             existing_df.loc[existing_df['學號(Student ID)'].isin(dropped_students['學號(Student ID)']), '成績(Score)'] = '棄選'
                             updated_df = pd.concat([existing_df, new_students]).drop_duplicates(subset=['學號(Student ID)'], keep='last')
